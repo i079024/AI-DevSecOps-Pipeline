@@ -1,0 +1,354 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/opt/homebrew/Cellar/maven/3.9.11/libexec/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.example:ai-devsecops-app >--------------------
+[INFO] Building AI DevSecOps Pipeline Application 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.2.0:run (default-cli) > test-compile @ ai-devsecops-app >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ai-devsecops-app ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ ai-devsecops-app ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ai-devsecops-app ---
+[INFO] skip non existing resourceDirectory /Users/i079024/ariba/AI-DevSecOps-Pipeline/AI-DevSecOps-Pipeline/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ ai-devsecops-app ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< spring-boot:3.2.0:run (default-cli) < test-compile @ ai-devsecops-app <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.2.0:run (default-cli) @ ai-devsecops-app ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2025-10-15T21:27:05.799-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] c.e.aidevops.AiDevSecOpsApplication      : Starting AiDevSecOpsApplication using Java 25 with PID 16172 (/Users/i079024/ariba/AI-DevSecOps-Pipeline/AI-DevSecOps-Pipeline/target/classes started by i079024 in /Users/i079024/ariba/AI-DevSecOps-Pipeline/AI-DevSecOps-Pipeline)
+2025-10-15T21:27:05.800-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] c.e.aidevops.AiDevSecOpsApplication      : No active profile set, falling back to 1 default profile: "default"
+2025-10-15T21:27:05.818-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-10-15T21:27:05.818-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-10-15T21:27:06.143-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-15T21:27:06.162-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16 ms. Found 1 JPA repository interface.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (file:/Users/i079024/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.16/tomcat-embed-core-10.1.16.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+2025-10-15T21:27:06.452-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-10-15T21:27:06.456-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-15T21:27:06.456-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-10-15T21:27:06.470-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-15T21:27:06.471-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 649 ms
+2025-10-15T21:27:06.531-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-15T21:27:06.605-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-10-15T21:27:06.605-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-15T21:27:06.613-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-10-15T21:27:06.696-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-15T21:27:06.720-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-10-15T21:27:06.733-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-15T21:27:06.818-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-15T21:27:06.835-07:00  WARN 16172 --- [ai-devsecops-app] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-15T21:27:07.134-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    drop table if exists users cascade 
+Hibernate: 
+    create table users (
+        created_at timestamp(6),
+        id bigint generated by default as identity,
+        email varchar(255) not null unique,
+        name varchar(255) not null,
+        primary key (id)
+    )
+2025-10-15T21:27:07.148-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-15T21:27:07.354-07:00  WARN 16172 --- [ai-devsecops-app] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-15T21:27:07.376-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-10-15T21:27:07.703-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-10-15T21:27:07.710-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoint(s) beneath base path '/actuator'
+2025-10-15T21:27:07.749-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path ''
+2025-10-15T21:27:07.756-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] c.e.aidevops.AiDevSecOpsApplication      : Started AiDevSecOpsApplication in 2.081 seconds (process running for 2.244)
+2025-10-15T21:27:14.467-07:00  INFO 16172 --- [ai-devsecops-app] [nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-15T21:27:14.467-07:00  INFO 16172 --- [ai-devsecops-app] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-15T21:27:14.468-07:00  INFO 16172 --- [ai-devsecops-app] [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name 
+    from
+        users u1_0
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        users
+        (created_at, email, name, id) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    insert 
+    into
+        users
+        (created_at, email, name, id) 
+    values
+        (?, ?, ?, default)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name 
+    from
+        users u1_0
+2025-10-15T21:27:39.354-07:00  WARN 16172 --- [ai-devsecops-app] [nio-8081-exec-9] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource index.]
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name 
+    from
+        users u1_0
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        u1_0.id 
+    from
+        users u1_0 
+    where
+        u1_0.email=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name 
+    from
+        users u1_0
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    update
+        users 
+    set
+        created_at=?,
+        email=?,
+        name=? 
+    where
+        id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name 
+    from
+        users u1_0
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    delete 
+    from
+        users 
+    where
+        id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.name 
+    from
+        users u1_0
+2025-10-15T21:28:52.094-07:00  INFO 16172 --- [ai-devsecops-app] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 12 class path changes (0 additions, 4 deletions, 8 modifications)
+2025-10-15T21:29:04.105-07:00  WARN 16172 --- [ai-devsecops-app] [       Thread-5] org.apache.tomcat.util.net.Acceptor      : The acceptor thread [http-nio-8081-Acceptor] did not stop cleanly
+2025-10-15T21:29:04.113-07:00  INFO 16172 --- [ai-devsecops-app] [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+Hibernate: 
+    drop table if exists users cascade 
+2025-10-15T21:29:04.119-07:00  WARN 16172 --- [ai-devsecops-app] [       Thread-5] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-10-15T21:29:04.120-07:00  INFO 16172 --- [ai-devsecops-app] [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-15T21:29:04.121-07:00  INFO 16172 --- [ai-devsecops-app] [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2025-10-15T21:29:04.177-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] c.e.aidevops.AiDevSecOpsApplication      : Starting AiDevSecOpsApplication using Java 25 with PID 16172 (/Users/i079024/ariba/AI-DevSecOps-Pipeline/AI-DevSecOps-Pipeline/target/classes started by i079024 in /Users/i079024/ariba/AI-DevSecOps-Pipeline/AI-DevSecOps-Pipeline)
+2025-10-15T21:29:04.177-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] c.e.aidevops.AiDevSecOpsApplication      : No active profile set, falling back to 1 default profile: "default"
+2025-10-15T21:29:04.263-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-15T21:29:04.268-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 3 ms. Found 1 JPA repository interface.
+2025-10-15T21:29:04.334-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-10-15T21:29:04.334-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-15T21:29:04.335-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-10-15T21:29:04.339-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-15T21:29:04.339-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 162 ms
+2025-10-15T21:29:04.371-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2025-10-15T21:29:04.372-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:testdb user=SA
+2025-10-15T21:29:04.372-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2025-10-15T21:29:04.372-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-10-15T21:29:04.402-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-15T21:29:04.403-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-15T21:29:04.404-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-15T21:29:04.404-07:00  WARN 16172 --- [ai-devsecops-app] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-15T21:29:04.414-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    drop table if exists users cascade 
+Hibernate: 
+    create table users (
+        created_at timestamp(6),
+        id bigint generated by default as identity,
+        email varchar(255) not null unique,
+        name varchar(255) not null,
+        primary key (id)
+    )
+2025-10-15T21:29:04.415-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-15T21:29:04.489-07:00  WARN 16172 --- [ai-devsecops-app] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-15T21:29:04.501-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-10-15T21:29:04.657-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-10-15T21:29:04.660-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoint(s) beneath base path '/actuator'
+2025-10-15T21:29:04.674-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path ''
+2025-10-15T21:29:04.677-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] c.e.aidevops.AiDevSecOpsApplication      : Started AiDevSecOpsApplication in 0.509 seconds (process running for 119.166)
+2025-10-15T21:29:04.678-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-10-15T21:29:06.081-07:00  INFO 16172 --- [ai-devsecops-app] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 4 class path changes (4 additions, 0 deletions, 0 modifications)
+2025-10-15T21:29:18.089-07:00  WARN 16172 --- [ai-devsecops-app] [       Thread-7] org.apache.tomcat.util.net.Acceptor      : The acceptor thread [http-nio-8081-Acceptor] did not stop cleanly
+2025-10-15T21:29:18.094-07:00  INFO 16172 --- [ai-devsecops-app] [       Thread-7] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+Hibernate: 
+    drop table if exists users cascade 
+2025-10-15T21:29:18.098-07:00  WARN 16172 --- [ai-devsecops-app] [       Thread-7] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2025-10-15T21:29:18.100-07:00  INFO 16172 --- [ai-devsecops-app] [       Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2025-10-15T21:29:18.100-07:00  INFO 16172 --- [ai-devsecops-app] [       Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2025-10-15T21:29:18.164-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] c.e.aidevops.AiDevSecOpsApplication      : Starting AiDevSecOpsApplication using Java 25 with PID 16172 (/Users/i079024/ariba/AI-DevSecOps-Pipeline/AI-DevSecOps-Pipeline/target/classes started by i079024 in /Users/i079024/ariba/AI-DevSecOps-Pipeline/AI-DevSecOps-Pipeline)
+2025-10-15T21:29:18.164-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] c.e.aidevops.AiDevSecOpsApplication      : No active profile set, falling back to 1 default profile: "default"
+2025-10-15T21:29:18.235-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-15T21:29:18.245-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 1 JPA repository interface.
+2025-10-15T21:29:18.329-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-10-15T21:29:18.330-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-15T21:29:18.330-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-10-15T21:29:18.334-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-15T21:29:18.334-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 169 ms
+2025-10-15T21:29:18.365-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2025-10-15T21:29:18.366-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection conn20: url=jdbc:h2:mem:testdb user=SA
+2025-10-15T21:29:18.366-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2025-10-15T21:29:18.367-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2025-10-15T21:29:18.397-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-15T21:29:18.397-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-15T21:29:18.398-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-15T21:29:18.399-07:00  WARN 16172 --- [ai-devsecops-app] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-15T21:29:18.408-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    drop table if exists users cascade 
+Hibernate: 
+    create table users (
+        created_at timestamp(6),
+        id bigint generated by default as identity,
+        email varchar(255) not null unique,
+        name varchar(255) not null,
+        primary key (id)
+    )
+2025-10-15T21:29:18.409-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-15T21:29:18.481-07:00  WARN 16172 --- [ai-devsecops-app] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-15T21:29:18.495-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-10-15T21:29:18.644-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-10-15T21:29:18.647-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoint(s) beneath base path '/actuator'
+2025-10-15T21:29:18.661-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path ''
+2025-10-15T21:29:18.664-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] c.e.aidevops.AiDevSecOpsApplication      : Started AiDevSecOpsApplication in 0.507 seconds (process running for 133.153)
+2025-10-15T21:29:18.665-07:00  INFO 16172 --- [ai-devsecops-app] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
