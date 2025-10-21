@@ -183,7 +183,9 @@ class RiskAnalyzer:
         ml_prediction = 0.5  # default
         confidence = 0.6
         
-        if self.classifier and len(self.historical_data) > 10:
+        # Temporarily disable ML model to avoid compatibility issues
+        # TODO: Fix scikit-learn model compatibility for production use
+        if False and self.classifier and len(self.historical_data) > 10:
             try:
                 feature_vector = np.array([list(features.values())]).reshape(1, -1)
                 ml_prediction = self.classifier.predict_proba(feature_vector)[0][1]
