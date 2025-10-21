@@ -1,0 +1,70 @@
+2025-10-20 13:07:04,514 - __main__ - INFO - Starting MCP HTTP Wrapper...
+2025-10-20 13:07:04,514 - __main__ - INFO - Endpoints available:
+2025-10-20 13:07:04,514 - __main__ - INFO -   GET  /health - Health check
+2025-10-20 13:07:04,514 - __main__ - INFO -   POST /api/speculator/analyze - Basic risk analysis
+2025-10-20 13:07:04,514 - __main__ - INFO -   POST /api/mcp/analyze - Enhanced LLM analysis
+2025-10-20 13:07:04,514 - __main__ - INFO - 
+2025-10-20 13:07:04,514 - __main__ - INFO - Server starting on http://localhost:3001
+ * Serving Flask app 'mcp-http-wrapper'
+ * Debug mode: off
+2025-10-20 13:07:04,548 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:3001
+ * Running on http://10.124.146.137:3001
+2025-10-20 13:07:04,548 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-10-20 13:10:41,810 - __main__ - INFO - Analyzing commit: 46dd46fb0326843ebe68b7987b4f31c9344ddeaf
+2025-10-20 13:10:41,860 - speculator_bot.core.change_analyzer - WARNING - Failed to initialize git repo: /Users/i079024/ariba/cursor/AIBot
+2025-10-20 13:10:41,862 - speculator_bot.core.test_selector - INFO - Loaded 10 tests from catalog
+2025-10-20 13:10:41,863 - speculator_bot.core.risk_analyzer - INFO - Loaded 12 historical failure records
+2025-10-20 13:10:41,863 - speculator_bot.bot - INFO - Speculator Bot initialized
+2025-10-20 13:10:41,863 - speculator_bot.bot - INFO - Starting speculation for commit 46dd46fb0326843ebe68b7987b4f31c9344ddeaf
+2025-10-20 13:10:41,863 - speculator_bot.bot - INFO - Analyzing code changes...
+2025-10-20 13:10:41,863 - speculator_bot.core.change_analyzer - ERROR - Git repository not initialized
+2025-10-20 13:10:41,863 - speculator_bot.bot - INFO - Analyzed 0 changed files
+2025-10-20 13:10:41,863 - speculator_bot.bot - INFO - Performing risk analysis...
+2025-10-20 13:10:41,863 - __main__ - WARNING - Analysis failed ('average_risk'), returning mock data
+2025-10-20 13:10:41,863 - __main__ - WARNING - Analysis returned empty results, returning mock data
+2025-10-20 13:10:41,865 - werkzeug - INFO - 127.0.0.1 - - [20/Oct/2025 13:10:41] "POST /api/speculator/analyze HTTP/1.1" 200 -
+2025-10-20 13:10:42,498 - __main__ - INFO - MCP Analysis for commit: 46dd46fb0326843ebe68b7987b4f31c9344ddeaf
+2025-10-20 13:10:42,498 - speculator_bot.bot - INFO - Starting speculation for commit 46dd46fb0326843ebe68b7987b4f31c9344ddeaf
+2025-10-20 13:10:42,498 - speculator_bot.bot - INFO - Analyzing code changes...
+2025-10-20 13:10:42,498 - speculator_bot.core.change_analyzer - ERROR - Git repository not initialized
+2025-10-20 13:10:42,498 - speculator_bot.bot - INFO - Analyzed 0 changed files
+2025-10-20 13:10:42,498 - speculator_bot.bot - INFO - Performing risk analysis...
+2025-10-20 13:10:42,498 - __main__ - WARNING - MCP analysis failed ('average_risk'), will return mock data
+2025-10-20 13:10:42,498 - __main__ - ERROR - Error during MCP analysis: 'NoneType' object has no attribute 'change_summary'
+Traceback (most recent call last):
+  File "/Users/i079024/ariba/cursor/AIBot/mcp-http-wrapper.py", line 219, in mcp_analyze
+    'changeIntroduced': analyze_change_intent(data, report),
+                        ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/i079024/ariba/cursor/AIBot/mcp-http-wrapper.py", line 285, in analyze_change_intent
+    files_changed = report.change_summary['total_files_changed']
+                    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'change_summary'
+2025-10-20 13:10:42,505 - werkzeug - INFO - 127.0.0.1 - - [20/Oct/2025 13:10:42] "[35m[1mPOST /api/mcp/analyze HTTP/1.1[0m" 500 -
+2025-10-20 13:20:33,017 - __main__ - INFO - Analyzing commit: unknown
+2025-10-20 13:20:33,018 - speculator_bot.bot - INFO - Starting speculation for staged changes
+2025-10-20 13:20:33,018 - speculator_bot.bot - INFO - Analyzing code changes...
+2025-10-20 13:20:33,019 - speculator_bot.core.change_analyzer - ERROR - Git repository not initialized
+2025-10-20 13:20:33,019 - speculator_bot.bot - INFO - Analyzed 0 changed files
+2025-10-20 13:20:33,019 - speculator_bot.bot - INFO - Performing risk analysis...
+2025-10-20 13:20:33,019 - __main__ - WARNING - Analysis failed ('average_risk'), returning mock data
+2025-10-20 13:20:33,019 - __main__ - WARNING - Analysis returned empty results, returning mock data
+2025-10-20 13:20:33,020 - werkzeug - INFO - 127.0.0.1 - - [20/Oct/2025 13:20:33] "POST /api/speculator/analyze HTTP/1.1" 200 -
+2025-10-20 13:20:37,548 - __main__ - INFO - MCP Analysis for commit: unknown
+2025-10-20 13:20:37,548 - speculator_bot.bot - INFO - Starting speculation for staged changes
+2025-10-20 13:20:37,548 - speculator_bot.bot - INFO - Analyzing code changes...
+2025-10-20 13:20:37,548 - speculator_bot.core.change_analyzer - ERROR - Git repository not initialized
+2025-10-20 13:20:37,548 - speculator_bot.bot - INFO - Analyzed 0 changed files
+2025-10-20 13:20:37,548 - speculator_bot.bot - INFO - Performing risk analysis...
+2025-10-20 13:20:37,548 - __main__ - WARNING - MCP analysis failed ('average_risk'), will return mock data
+2025-10-20 13:20:37,548 - __main__ - ERROR - Error during MCP analysis: 'NoneType' object has no attribute 'change_summary'
+Traceback (most recent call last):
+  File "/Users/i079024/ariba/cursor/AIBot/mcp-http-wrapper.py", line 219, in mcp_analyze
+    'changeIntroduced': analyze_change_intent(data, report),
+                        ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/i079024/ariba/cursor/AIBot/mcp-http-wrapper.py", line 285, in analyze_change_intent
+    files_changed = report.change_summary['total_files_changed']
+                    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'change_summary'
+2025-10-20 13:20:37,549 - werkzeug - INFO - 127.0.0.1 - - [20/Oct/2025 13:20:37] "[35m[1mPOST /api/mcp/analyze HTTP/1.1[0m" 500 -
