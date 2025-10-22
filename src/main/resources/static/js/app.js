@@ -212,8 +212,10 @@ function updateFormButton() {
 }
 
 // Render the users table
-function renderUsersTable() {
-    if (users.length === 0) {
+function renderUsersTable(userList = null) {
+    const usersToRender = userList || users;
+    
+    if (usersToRender.length === 0) {
         usersTable.style.display = 'none';
         usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No users found. Add some users to get started!</td></tr>';
         return;
@@ -221,7 +223,7 @@ function renderUsersTable() {
     
     usersTable.style.display = 'table';
     
-    usersTableBody.innerHTML = users.map(user => `
+    usersTableBody.innerHTML = usersToRender.map(user => `
         <tr class="fade-in">
             <td>${user.id}</td>
             <td>${escapeHtml(user.name)}</td>
@@ -293,6 +295,102 @@ function formatDate(dateString) {
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
 }
 
+// Enhanced API functions for new endpoints
+async function searchUsers(query) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/search?query=${encodeURIComponent(query)}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const users = await response.json();
+        renderUsersTable(users);
+    } catch (error) {
+        console.error('Error searching users:', error);
+        showError('Failed to search users. Please try again.');
+    }
+}
+
+async function getUserCount() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/count`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        return data.totalUsers;
+    } catch (error) {
+        console.error('Error getting user count:', error);
+        return 0;
+    }
+}
+
+async function loadUsersPaginated(page = 0, size = 10, sortBy = 'id', sortDir = 'asc') {
+    try {
+        const response = await fetch(`${API_BASE_URL}/paginated?page=${page}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        renderUsersTable(data.users);
+        updatePaginationInfo(data);
+    } catch (error) {
+        console.error('Error loading paginated users:', error);
+        showError('Failed to load paginated users. Please try again.');
+    }
+}
+
+function updatePaginationInfo(data) {
+    // Update pagination display (if you want to add pagination UI)
+    console.log(`Page ${data.currentPage + 1} of ${data.totalPages}, Total: ${data.totalItems}`);
+}
+
+// Add search functionality to the form
+function addSearchCapability() {
+    if (document.getElementById('searchInput')) return; // Already added
+    
+    const formSection = document.querySelector('.user-form-section');
+    const searchDiv = document.createElement('div');
+    searchDiv.innerHTML = `
+        <div class="form-group">
+            <label for="searchInput">🔍 Search Users:</label>
+            <input type="text" id="searchInput" placeholder="Search by name or email...">
+            <button type="button" id="searchBtn">Search</button>
+            <button type="button" id="clearSearchBtn">Clear</button>
+        </div>
+    `;
+    formSection.appendChild(searchDiv);
+    
+    // Add event listeners
+    document.getElementById('searchBtn').onclick = () => {
+        const query = document.getElementById('searchInput').value.trim();
+        if (query) {
+            searchUsers(query);
+        }
+    };
+    
+    document.getElementById('clearSearchBtn').onclick = () => {
+        document.getElementById('searchInput').value = '';
+        loadUsers(); // Reload all users
+    };
+    
+    // Search on Enter key
+    document.getElementById('searchInput').onkeypress = (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('searchBtn').click();
+        }
+    };
+}
+
+// Initialize enhanced features
+document.addEventListener('DOMContentLoaded', function() {
+    loadUsers();
+    setupEventListeners();
+    addSearchCapability();
+    
+    // Display user count
+    getUserCount().then(count => {
+        const header = document.querySelector('header p');
+        if (header) {
+            header.textContent = `User Management System - ${count} users`;
+        }
+    });
+});
+
 // Global functions for button clicks
 window.editUser = editUser;
 window.deleteUser = deleteUser;
+window.searchUsers = searchUsers;
