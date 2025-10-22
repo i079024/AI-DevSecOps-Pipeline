@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - AI DevSecOps Pipeline</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>About AI DevSecOps Pipeline</h1>
+            <p>Learn more about this application</p>
+        </header>
+
+        <main>
+            <section class="about-section">
+                <h2>Application Information</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>🚀 Version</h3>
+                        <p>1.0.0</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>🛠️ Technology Stack</h3>
+                        <ul>
+                            <li>Java 17 + Spring Boot 3.2.0</li>
+                            <li>Spring Data JPA + H2 Database</li>
+                            <li>HTML5 + CSS3 + JavaScript ES6+</li>
+                            <li>Maven Build Tool</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>📋 Features</h3>
+                        <ul>
+                            <li>User Management CRUD Operations</li>
+                            <li>REST API with JSON responses</li>
+                            <li>Pagination and Sorting</li>
+                            <li>Search functionality</li>
+                            <li>Bulk operations</li>
+                            <li>Real-time UI updates</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>🌐 API Endpoints</h3>
+                        <ul>
+                            <li>GET /api/users - List all users</li>
+                            <li>POST /api/users - Create user</li>
+                            <li>GET /api/users/{id} - Get user</li>
+                            <li>PUT /api/users/{id} - Update user</li>
+                            <li>DELETE /api/users/{id} - Delete user</li>
+                            <li>GET /api/users/search - Search users</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="navigation-section">
+                <h2>Navigation</h2>
+                <div class="nav-buttons">
+                    <a href="/" class="nav-btn">🏠 Home</a>
+                    <a href="/h2-console" class="nav-btn" target="_blank">🗄️ Database Console</a>
+                    <a href="/actuator/health" class="nav-btn" target="_blank">❤️ Health Check</a>
+                    <a href="/api/status" class="nav-btn" target="_blank">📊 Status API</a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AI DevSecOps Pipeline. Sample Spring Boot Application with Enhanced Controllers.</p>
+        </footer>
+    </div>
+
+    <style>
+        .about-section {
+            margin-bottom: 2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+
+        .navigation-section {
+            text-align: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .nav-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</body>
+</html>
