@@ -47,9 +47,23 @@ public class UserService {
     }
     
     public User createUser(User user) {
+        // Basic validation
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            throw new RuntimeException("Email cannot be empty");
+        }
+        if (user.getName() == null || user.getName().trim().isEmpty()) {
+            throw new RuntimeException("Name cannot be empty");
+        }
+        
+        // Normalize email
+        user.setEmail(user.getEmail().toLowerCase().trim());
+        
+        // Check for existing email
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("User with email " + user.getEmail() + " already exists");
         }
+        
+        // Save user
         return userRepository.save(user);
     }
     
@@ -57,9 +71,16 @@ public class UserService {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         
-        user.setName(userDetails.getName());
-        user.setEmail(userDetails.getEmail());
+        // Validate and normalize email if it's being updated
+        if (!user.getEmail().equals(userDetails.getEmail())) {
+            String newEmail = userDetails.getEmail().toLowerCase().trim();
+            if (userRepository.existsByEmail(newEmail)) {
+                throw new RuntimeException("Email " + newEmail + " is already in use");
+            }
+            user.setEmail(newEmail);
+        }
         
+        user.setName(userDetails.getName().trim());
         return userRepository.save(user);
     }
     
@@ -70,11 +91,14 @@ public class UserService {
     }
     
     public List<User> searchUsers(String query) {
-        // Simple search implementation - in real app you might use full-text search
+        if (query == null || query.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        
         List<User> allUsers = userRepository.findAll();
         List<User> matchingUsers = new ArrayList<>();
         
-        String lowerQuery = query.toLowerCase();
+        String lowerQuery = query.toLowerCase().trim();
         for (User user : allUsers) {
             if (user.getName().toLowerCase().contains(lowerQuery) || 
                 user.getEmail().toLowerCase().contains(lowerQuery)) {

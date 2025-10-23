@@ -10,11 +10,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/users")
@@ -99,13 +106,76 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
+    @PostMapping("/import/json")
+    public ResponseEntity<?> importUsersFromJson(@RequestParam("file") MultipartFile file) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            List<User> users = mapper.readValue(file.getInputStream(),
+                mapper.getTypeFactory().constructCollectionType(List.class, User.class));
+            
+            List<User> importedUsers = new ArrayList<>();
+            for (User user : users) {
+                try {
+                    importedUsers.add(userService.createUser(user));
+                } catch (RuntimeException e) {
+                    // Log the error and continue with next user
+                }
+            }
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Users imported successfully");
+            response.put("importedCount", importedUsers.size());
+            response.put("totalCount", users.size());
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                               .body("Error importing users: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/import/csv")
+    public ResponseEntity<?> importUsersFromCsv(@RequestParam("file") MultipartFile file) {
+        try {
+            CsvMapper mapper = new CsvMapper();
+            CsvSchema schema = CsvSchema.builder()
+                .addColumn("name")
+                .addColumn("email")
+                .addColumn("password")
+                .build()
+                .withHeader();
+
+            MappingIterator<User> userIterator = mapper
+                .readerFor(User.class)
+                .with(schema)
+                .readValues(file.getInputStream());
+
+            List<User> importedUsers = new ArrayList<>();
+            while (userIterator.hasNext()) {
+                try {
+                    User user = userIterator.next();
+                    importedUsers.add(userService.createUser(user));
+                } catch (RuntimeException e) {
+                    // Log the error and continue with next user
+                }
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Users imported successfully from CSV");
+            response.put("importedCount", importedUsers.size());
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                               .body("Error importing users from CSV: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/search")
     public ResponseEntity<List<User>> searchUsers(@RequestParam String query) {
         List<User> users = userService.searchUsers(query);
         return ResponseEntity.ok(users);
     }
-    
+
     @GetMapping("/count")
     public ResponseEntity<Map<String, Object>> getUserCount() {
         long count = userService.getUserCount();
