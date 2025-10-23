@@ -1,0 +1,725 @@
+{
+  "name": "testflow_2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jenkins-trigger",
+        "options": {}
+      },
+      "id": "472bab03-4571-483b-b0bf-cb9b926d70b8",
+      "name": "Jenkins Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -2940,
+        360
+      ],
+      "webhookId": "jenkins-trigger"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "commitSHA",
+              "value": "={{$json[\"body\"] ? $json[\"body\"][\"commitSHA\"] : $json[\"commitSHA\"]}}"
+            },
+            {
+              "name": "branch",
+              "value": "={{$json[\"body\"] ? $json[\"body\"][\"branch\"] : $json[\"branch\"]}}"
+            },
+            {
+              "name": "author",
+              "value": "={{$json[\"body\"] ? $json[\"body\"][\"author\"] : $json[\"author\"]}}"
+            },
+            {
+              "name": "sonarURL",
+              "value": "={{$json[\"body\"] ? $json[\"body\"][\"sonarURL\"] : $json[\"sonarURL\"]}}"
+            },
+            {
+              "name": "buildNumber",
+              "value": "={{$json[\"body\"] ? $json[\"body\"][\"buildNumber\"] : $json[\"buildNumber\"]}}"
+            },
+            {
+              "name": "jenkinsURL",
+              "value": "={{$json[\"body\"] ? $json[\"body\"][\"jenkinsURL\"] : $json[\"jenkinsURL\"]}}"
+            },
+            {
+              "name": "repository",
+              "value": "={{$json[\"body\"] ? $json[\"body\"][\"repository\"] : $json[\"repository\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eb6d470a-c50a-4408-a0f4-04551690bf36",
+      "name": "Extract Build Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        -2740,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:3001/api/speculator/analyze",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "commitSHA",
+              "value": "={{$node[\"Extract Build Data\"].json[\"commitSHA\"]}}"
+            },
+            {
+              "name": "branch",
+              "value": "={{$node[\"Extract Build Data\"].json[\"branch\"]}}"
+            },
+            {
+              "name": "author",
+              "value": "={{$node[\"Extract Build Data\"].json[\"author\"]}}"
+            },
+            {
+              "name": "sonarURL",
+              "value": "={{$node[\"Extract Build Data\"].json[\"sonarURL\"]}}"
+            },
+            {
+              "name": "repository",
+              "value": "={{$node[\"Extract Build Data\"].json[\"repository\"]}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "a8482fc4-1b20-41e1-b4b7-0d54d1f2e341",
+      "name": "Speculator Bot Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -2540,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.github.com/repos/{{$node[\"Extract Build Data\"].json[\"repository\"].replace('https://github.com/', '').replace('.git', '')}}/commits/{{$node[\"Extract Build Data\"].json[\"commitSHA\"]}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "1cfd2360-3760-4b28-a899-605953ed5d49",
+      "name": "Fetch Git Commit Details",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -2340,
+        360
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "Otu9GPfn039w2gyj",
+          "name": "GitHub DevSecOps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:3001/api/mcp/analyze",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "commitSHA",
+              "value": "={{$node[\"Extract Build Data\"].json[\"commitSHA\"]}}"
+            },
+            {
+              "name": "codeDiff",
+              "value": "={{$node[\"Fetch Git Commit Details\"].json[\"files\"]}}"
+            },
+            {
+              "name": "sonarURL",
+              "value": "={{$node[\"Extract Build Data\"].json[\"sonarURL\"]}}"
+            },
+            {
+              "name": "context",
+              "value": "={{JSON.stringify({branch: $node[\"Extract Build Data\"].json[\"branch\"], author: $node[\"Extract Build Data\"].json[\"author\"], repository: $node[\"Extract Build Data\"].json[\"repository\"]})}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "a6bd3b12-6e88-481b-ba87-a5457b22e4a0",
+      "name": "LLM Analysis via MCP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -2140,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:3001/api/generate/unit-tests",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "analysis",
+              "value": "={{$node[\"LLM Analysis via MCP\"].json.analysis}}"
+            },
+            {
+              "name": "codeDiff",
+              "value": "={{$node[\"Fetch Git Commit Details\"].json[\"files\"]}}"
+            },
+            {
+              "name": "commitSHA",
+              "value": "={{$node[\"Extract Build Data\"].json[\"commitSHA\"]}}"
+            },
+            {
+              "name": "context",
+              "value": "={{JSON.stringify({branch: $node[\"Extract Build Data\"].json[\"branch\"], author: $node[\"Extract Build Data\"].json[\"author\"], repository: $node[\"Extract Build Data\"].json[\"repository\"]})}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "f42b1460-8e57-4b20-9f8e-d69f817d289e",
+      "name": "Generate Unit Test Code",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -1940,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse LLM analysis results and unit test generation\nconst llmData = $node[\"LLM Analysis via MCP\"].json.analysis;\nconst speculatorData = $node[\"Speculator Bot Analysis\"].json.analysis;\nconst buildData = $node[\"Extract Build Data\"].json;\nconst unitTestData = items[0].json;\n\n// Generate unique branch name with timestamp to avoid conflicts\nconst shortSHA = buildData.commitSHA.substring(0, 7);\nconst timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);\nconst newBranchName = `ai-improvements-${shortSHA}-${timestamp}`;\n\n// Prepare PR body with unit test information\nlet testSummary = '';\nif (unitTestData.success && unitTestData.generatedTests) {\n  testSummary = `\\n### 🧪 Generated Unit Tests\\n${unitTestData.generatedTests.map(test => \n    `- **${test.filename}**: ${test.description || ('Tests for ' + test.source_file)} (${test.testCount || test.test_methods_count || 1} tests)`\n  ).join('\\n')}\\n\\n**Test Generation Summary**: ${unitTestData.generatedTests.length} test files created\\n`;\n} else if (unitTestData.generated_tests) {\n  testSummary = `\\n### 🧪 Generated Unit Tests\\n${unitTestData.generated_tests.map(test => \n    `- **${test.filename}**: Tests for ${test.source_file} (${test.test_methods_count} tests)`\n  ).join('\\n')}\\n\\n**Test Generation Summary**: ${unitTestData.generated_tests.length} test files created\\n`;\n}\n\nconst prBody = `## 🤖 AI-Generated Code Analysis & Improvements\n\n### Summary\n**Commit**: ${buildData.commitSHA}\n**Branch**: ${buildData.branch}\n**Author**: ${buildData.author}\n**Build**: #${buildData.buildNumber}\n\n---\n\n### 📊 Risk Assessment\n- **Risk Score**: ${speculatorData.deploymentRiskScore.toFixed(2)} (${speculatorData.riskLevel})\n- **Files Changed**: ${speculatorData.changeSummary.filesChanged}\n- **Lines Added**: ${speculatorData.changeSummary.linesAdded}\n- **Lines Removed**: ${speculatorData.changeSummary.linesRemoved}\n\n---\n\n### 🔍 Change Analysis\n${llmData.changeIntroduced}\n\n---\n\n### ⚠️ Gap Analysis\n${llmData.gapAnalysis.map(gap => \n  `**${gap.category}**: ${gap.concern}\\n*Recommendation*: ${gap.recommendation}`\n).join('\\n\\n')}\n\n---\n${testSummary}\n### 🧪 Test Coverage Recommendations\n${llmData.testCoverage.map(test => \n  `- **${test.priority}**: ${test.suggestion} (${test.reasoning})`\n).join('\\n')}\n\n---\n\n### 🔒 Security Fixes\n${llmData.securityFixes.map(fix => \n  `- **${fix.type}** [${fix.priority}]: ${fix.action}`\n).join('\\n')}\n\n---\n\n### 📈 Metrics\n- **Test Coverage**: ${(speculatorData.testSelection.coverageScore * 100).toFixed(1)}%\n- **Recommended Tests**: ${speculatorData.testSelection.totalTests}\n- **Est. Test Time**: ${speculatorData.testSelection.estimatedTimeMinutes.toFixed(1)} minutes\n\n---\n\n### 🔗 Links\n- [Jenkins Build](${buildData.jenkinsURL})\n- [SonarQube Report](${buildData.sonarURL})\n\n---\n\n*Generated by AI-Enhanced DevSecOps Pipeline*\n`;\n\nreturn [\n  {\n    json: {\n      newBranchName,\n      prTitle: `AI Analysis: ${llmData.changeIntroduced.substring(0, 80)}...`,\n      prBody,\n      baseBranch: buildData.branch,\n      commitSHA: buildData.commitSHA,\n      hasImprovements: llmData.testCoverage.length > 0 || llmData.securityFixes.length > 0,\n      analysis: llmData,\n      risk: speculatorData,\n      unitTests: unitTestData\n    }\n  }\n];"
+      },
+      "id": "d0dbfaa1-c15b-4152-a9ad-1d1a5496dc6e",
+      "name": "Parse & Format Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1740,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$json[\"hasImprovements\"]}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "9a4033e3-c930-4b94-84c7-dfc1d9f92b17",
+      "name": "Has Improvements?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1540,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Handle GitHub branch creation with conflict resolution\nconst buildData = $('Extract Build Data').first().json;\nconst parseData = $input.first().json;\nconst unitTestData = $('Generate Unit Test Code').first().json;\nconst shortSHA = buildData.commitSHA.substring(0, 7);\nconst timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);\nconst millis = Date.now() % 10000;\n\n// Try multiple branch name strategies\nconst branchCandidates = [\n  parseData.newBranchName, // Original timestamped name\n  `ai-improvements-${shortSHA}-${millis}`, // With milliseconds\n  `ai-fixes-${shortSHA}-${timestamp}`, // Alternative prefix\n  `automated-improvements-${shortSHA}-${Date.now()}` // Fallback with full timestamp\n];\n\n// Return the first candidate (the timestamped version should work)\n\n// Comprehensive logging\nconsole.log('[DEBUG] Preparing to create branch with the following data:');\nconsole.log(`  - Branch Name: ${branchCandidates[0]}`);\nconsole.log(`  - Repository: ${buildData.repository}`);\nconsole.log(`  - Commit SHA: ${buildData.commitSHA}`);\n\nreturn [{\n  json: {\n    branchName: branchCandidates[0],\n    fallbackBranches: branchCandidates.slice(1),\n    repository: buildData.repository,\n    commitSHA: buildData.commitSHA,\n    originalData: parseData,\n    unitTests: unitTestData\n  }\n}];"
+      },
+      "id": "0551545a-c718-4770-b8b4-af09927d402b",
+      "name": "Prepare Branch Creation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1340,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log the exact data being sent to GitHub API for branch creation\nconst inputData = $input.first().json;\n\nconsole.log('[DEBUG] GitHub Branch Creation Request Data:');\nconsole.log(`  - Repository: ${inputData.repository}`);\nconsole.log(`  - Branch Name: ${inputData.branchName}`);\nconsole.log(`  - Commit SHA: ${inputData.commitSHA}`);\nconsole.log(`  - Repository (cleaned): ${inputData.repository.replace('https://github.com/', '').replace('.git', '')}`);\nconsole.log(`  - Full ref: refs/heads/${inputData.branchName}`);\n\n// Validate the data\nif (!inputData.repository || !inputData.branchName || !inputData.commitSHA) {\n  console.error('[ERROR] Missing required data for branch creation:');\n  console.error(`  - Repository: ${inputData.repository}`);\n  console.error(`  - Branch Name: ${inputData.branchName}`);\n  console.error(`  - Commit SHA: ${inputData.commitSHA}`);\n}\n\nreturn $input.all();"
+      },
+      "id": "ebb62f4d-4b29-4ef3-9bad-ab13c950d638",
+      "name": "Debug Branch Creation Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1240,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.github.com/repos/{{$json[\"repository\"].replace('https://github.com/', '').replace('.git', '')}}/git/refs/heads/{{$('Extract Build Data').first().json.branch}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "options": {
+          "response": {},
+          "timeout": 30000
+        }
+      },
+      "id": "88667c1e-b24f-436c-be27-9521d80685a1",
+      "name": "Get Base Branch Info",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -1140,
+        240
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "Otu9GPfn039w2gyj",
+          "name": "GitHub DevSecOps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.github.com/repos/{{$('Debug Branch Creation Data').first().json[\"repository\"].replace('https://github.com/', '').replace('.git', '')}}/git/refs",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "ref",
+              "value": "=refs/heads/{{$('Debug Branch Creation Data').first().json.branchName}}"
+            },
+            {
+              "name": "sha",
+              "value": "={{$json.object.sha}}"
+            }
+          ]
+        },
+        "options": {
+          "response": {},
+          "timeout": 30000
+        }
+      },
+      "id": "create-new-branch",
+      "name": "Create GitHub Branch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -1040,
+        240
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "Otu9GPfn039w2gyj",
+          "name": "GitHub DevSecOps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process unit test files for GitHub commits\nconst branchData = $input.first().json;\nconst unitTestData = $('Generate Unit Test Code').first().json;\nconst buildData = $('Extract Build Data').first().json;\nconst branchName = branchData.branchName;\n\n// Debug input data\nconsole.log(`[INPUT DEBUG] Branch data received:`, JSON.stringify(branchData));\nconsole.log(`[INPUT DEBUG] Branch name from input: ${branchName}`);\nconsole.log(`[INPUT DEBUG] Build data branch: ${buildData.branch}`);\n\n// Check if branch creation was successful\nconst branchResponse = $('Create GitHub Branch').first();\nlet actualBranchName = branchName;\n\n// The branch creation node now ignores HTTP status errors, so we check the output\nconst branchBody = branchResponse.json.body || {};\nif (branchResponse.json.statusCode && branchResponse.json.statusCode !== 201) {\n  // 422 means it already exists, which is fine.\n  if (branchResponse.json.statusCode === 422 && branchBody.message && branchBody.message.includes('Reference already exists')) {\n      console.log('Branch already exists, proceeding.');\n  } else {\n      console.log(`Branch creation may have failed with status ${branchResponse.json.statusCode}, using fallback branch name.`);\n  }\n} else {\n    console.log('Branch created successfully or status ignored.');\n}\n\n\nlet commits = [];\n\n// Handle both generatedTests and generated_tests field names\nconst generatedTests = unitTestData?.generatedTests || unitTestData?.generated_tests || [];\n\nif (unitTestData?.success && Array.isArray(generatedTests) && generatedTests.length > 0) {\n  // Filter out tests with empty or missing content and ensure unique filenames\n  const filteredTests = generatedTests.filter(test => test && typeof test === 'object' && test.content && typeof test.content === 'string' && test.content.trim() !== '' && test.filename);\n  const uniqueTests = new Map();\n  \n  filteredTests.forEach((test, index) => {\n    // Generate proper Java class name and filename\n    let originalFilename = test.filename;\n    \n    // Create proper Java class name\n    let baseClassName = originalFilename.replace(/[^a-zA-Z0-9]/g, '');\n    \n    // Ensure it starts with uppercase letter and has Test suffix\n    if (!baseClassName.endsWith('Test')) {\n      baseClassName += 'Test';\n    }\n    \n    // Capitalize first letter\n    baseClassName = baseClassName.charAt(0).toUpperCase() + baseClassName.slice(1);\n    \n    // Create final filename\n    let filename = baseClassName + '.java';\n    \n    // Handle duplicates\n    if (uniqueTests.has(filename)) {\n      const baseName = baseClassName;\n      filename = `${baseName}_${index + 1}.java`;\n      baseClassName = `${baseName}_${index + 1}`;\n    }\n    \n    // Fix the Java content to use proper class names and syntax\n    let fixedContent = test.content;\n    \n    // Replace invalid class declarations\n    fixedContent = fixedContent.replace(/public class [^{\\s]+\\s*{/g, `public class ${baseClassName} {`);\n    \n    // Replace invalid variable declarations with proper mock objects\n    fixedContent = fixedContent.replace(/@Mock\\s*private [^;]+;/g, '@Mock\\n    private Object mockObject;');\n    \n    // Fix DisplayName annotation\n    fixedContent = fixedContent.replace(/@DisplayName\\([^)]*\\)/g, `@DisplayName(\"${baseClassName} - Unit Tests\")`);\n    \n    // Ensure package statement is valid\n    if (!fixedContent.includes('package ')) {\n      fixedContent = 'package com.example.test;\\n\\n' + fixedContent;\n    }\n    \n    console.log(`[DEBUG] Fixed Java class: ${originalFilename} -> ${filename} (class: ${baseClassName})`);\n    \n    uniqueTests.set(filename, {\n      path: `tests/${filename}`,\n      content: fixedContent,\n      message: `Add unit tests for ${test.source_file || 'code changes'}`\n    });\n  });\n  \n  commits = Array.from(uniqueTests.values());\n  \n  // If no valid tests after filtering, add placeholder\n  if (commits.length === 0) {\n    commits = [{\n      path: 'tests/README.md',\n      content: `# AI-Generated Tests\\n\\nUnit test generation completed but no valid test content was produced.\\n\\nGenerated on: ${new Date().toISOString()}\\nCommit: ${buildData.commitSHA}\\nOriginal tests attempted: ${generatedTests.length}\\n\\nIssues found:\\n- Empty or missing test content\\n- Invalid test file structure\\n`,\n      message: 'Add AI-generated tests directory (no valid tests generated)'\n    }];\n  }\n} else {\n  // Create a placeholder commit to ensure the workflow continues\n  commits = [{\n    path: 'tests/README.md',\n    content: `# AI-Generated Tests\\n\\nThis directory contains AI-generated unit tests.\\n\\nGenerated on: ${new Date().toISOString()}\\nCommit: ${buildData.commitSHA}\\nUnit test generation status: ${unitTestData?.success ? 'successful but no tests' : 'failed'}\\n\\nDebug info:\\n- Success: ${unitTestData?.success}\\n- Generated tests count: ${Array.isArray(generatedTests) ? generatedTests.length : 0}\\n`,\n    message: 'Add AI-generated tests directory'\n  }];\n}\n\nconsole.log(`Prepared ${commits.length} commits for test files on branch ${actualBranchName}`);\nconsole.log(`[DEBUG] Branch information: ${actualBranchName}`);\nconsole.log(`[DEBUG] Repository information: ${buildData.repository}`);\n\n// Add common metadata to all commits and perform final validation\nconst commitsWithMetadata = commits.map((commit, index) => {\n    const finalCommit = {\n        path: commit.path || 'tests/error.md',\n        content: commit.content || '# Error: Content was missing',\n        message: commit.message || 'Fix: Commit message was missing',\n        branch: actualBranchName\n    };\n\n    // Validate required fields before logging\n    if (!finalCommit.path || !finalCommit.content || !finalCommit.message || !finalCommit.branch) {\n        console.error(`[ERROR] Item ${index} missing required fields:`);\n        console.error(`  - Path: ${!!finalCommit.path}`);\n        console.error(`  - Content: ${!!finalCommit.content}`);\n        console.error(`  - Message: ${!!finalCommit.message}`);\n        console.error(`  - Branch: ${!!finalCommit.branch}`);\n    }\n\n    // Comprehensive logging for each item\n    console.log(`[DEBUG] Item ${index} prepared for commit:`);\n    console.log(`  - Path: ${finalCommit.path}`);\n    console.log(`  - Message: ${finalCommit.message}`);\n    console.log(`  - Branch: ${finalCommit.branch}`);\n    console.log(`  - Content Length: ${finalCommit.content.length}`);\n    console.log(`  - Has Content: ${!!finalCommit.content}`);\n    // Log a snippet of the content to verify it's not empty\n    console.log(`  - Content Snippet: ${(finalCommit.content || '').substring(0, 100).replace(/\\n/g, ' ')}...`);\n    \n    // Final verification that branch is set\n    console.log(`[FINAL CHECK] Item ${index} - Branch before return: ${finalCommit.branch}`);\n    console.log(`[FINAL CHECK] Item ${index} - Complete object:`, JSON.stringify(finalCommit, null, 2));\n\n    return { json: finalCommit };\n});\n\nreturn commitsWithMetadata;"
+      },
+      "id": "0feed91e-9a7f-49c5-9b0c-651b74f4a944",
+      "name": "Prepare Test File Commits",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -940,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.github.com/repos/{{$('Extract Build Data').first().json[\"repository\"].replace('https://github.com/', '').replace('.git', '')}}/contents/{{$json.path}}?ref={{$('Prepare Branch Creation').first().json.branchName}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 15000,
+          "ignoreHttpStatusErrors": true
+        }
+      },
+      "id": "check-file-exists",
+      "name": "Check File Exists",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -840,
+        240
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "Otu9GPfn039w2gyj",
+          "name": "GitHub DevSecOps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare GitHub API request based on file existence\nconst inputData = $('Prepare Test File Commits').first().json;\nconst checkResponse = $input.first().json;\nconst buildData = $('Extract Build Data').first().json;\n\n// Extract repository name from URL\nconst repoName = buildData.repository.replace('https://github.com/', '').replace('.git', '');\n\n// Check if file exists (status 200) or not (status 404)\nconst fileExists = checkResponse.statusCode === 200;\nlet sha = null;\n\nif (fileExists && checkResponse.sha) {\n  sha = checkResponse.sha;\n  console.log(`[DEBUG] File exists, using SHA: ${sha}`);\n} else {\n  console.log(`[DEBUG] File does not exist, creating new file`);\n}\n\n// Prepare the request body - only include SHA if file exists\nconst requestBody = {\n  message: inputData.message,\n  content: Buffer.from(inputData.content).toString('base64'),\n  branch: inputData.branch\n};\n\n// Add SHA only if file exists\nif (sha) {\n  requestBody.sha = sha;\n}\n\nconst githubRequest = {\n  url: `https://api.github.com/repos/${repoName}/contents/${inputData.path}`,\n  body: JSON.stringify(requestBody),\n  message: inputData.message,\n  content: Buffer.from(inputData.content).toString('base64'),\n  branch: inputData.branch\n};\n\n// Add SHA to top level only if it exists (for bodyParameters fallback)\nif (sha) {\n  githubRequest.sha = sha;\n}\n\nconsole.log(`[DEBUG] Prepared GitHub request for: ${inputData.path}`);\nconsole.log(`[DEBUG] URL: ${githubRequest.url}`);\nconsole.log(`[DEBUG] Message: ${githubRequest.message}`);\nconsole.log(`[DEBUG] Branch: ${githubRequest.branch}`);\nconsole.log(`[DEBUG] Content length: ${githubRequest.content.length}`);\nconsole.log(`[DEBUG] File exists: ${fileExists}`);\nconsole.log(`[DEBUG] Using SHA: ${sha || 'none (new file)'}`);\nconsole.log(`[DEBUG] Request body: ${githubRequest.body}`);\n\nreturn [{ json: githubRequest }];"
+      },
+      "id": "prepare-github-request",
+      "name": "Prepare GitHub Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -740,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{$json.url}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Accept", 
+              "value": "application/vnd.github.v3+json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "n8n-workflow"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.body}}",
+        "options": {
+          "allowUnauthorizedCerts": false,
+          "response": {},
+          "timeout": 30000
+        }
+      },
+      "id": "f18ad884-6f01-4e4c-bc44-9b297882c689",
+      "name": "Commit Unit Test Files",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -640,
+        240
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "Otu9GPfn039w2gyj",
+          "name": "GitHub DevSecOps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.github.com/repos/{{$('Extract Build Data').first().json[\"repository\"].replace('https://github.com/', '').replace('.git', '')}}/pulls",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "={{$('Parse & Format Results').first().json.prTitle}}"
+            },
+            {
+              "name": "body",
+              "value": "={{$('Parse & Format Results').first().json.prBody}}"
+            },
+            {
+              "name": "head",
+              "value": "={{$('Prepare Branch Creation').first().json.branchName}}"
+            },
+            {
+              "name": "base",
+              "value": "={{$('Parse & Format Results').first().json.baseBranch}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "89d40732-322d-450b-95de-f1df62356616",
+      "name": "Create Pull Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -540,
+        240
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "Otu9GPfn039w2gyj",
+          "name": "GitHub DevSecOps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:3001/api/dashboard/pr-created",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prNumber",
+              "value": "={{$node[\"Create Pull Request\"].json[\"number\"]}}"
+            },
+            {
+              "name": "prUrl",
+              "value": "={{$node[\"Create Pull Request\"].json[\"html_url\"]}}"
+            },
+            {
+              "name": "commitSHA",
+              "value": "={{$('Extract Build Data').first().json[\"commitSHA\"]}}"
+            },
+            {
+              "name": "branch",
+              "value": "={{$('Prepare Branch Creation').first().json[\"branchName\"]}}"
+            },
+            {
+              "name": "testsGenerated",
+              "value": "={{$('Parse & Format Results').first().json[\"unitTests\"].generatedTests ? $('Parse & Format Results').first().json[\"unitTests\"].generatedTests.length : ($('Parse & Format Results').first().json[\"unitTests\"].generated_tests ? $('Parse & Format Results').first().json[\"unitTests\"].generated_tests.length : 0)}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "12aac32b-dc2f-489f-b2a7-0b090f1070d8",
+      "name": "Notify Dashboard of PR Creation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        -540,
+        -20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Jenkins Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract Build Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Build Data": {
+      "main": [
+        [
+          {
+            "node": "Speculator Bot Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Speculator Bot Analysis": {
+      "main": [
+        [
+          {
+            "node": "Fetch Git Commit Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Git Commit Details": {
+      "main": [
+        [
+          {
+            "node": "LLM Analysis via MCP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Analysis via MCP": {
+      "main": [
+        [
+          {
+            "node": "Generate Unit Test Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Unit Test Code": {
+      "main": [
+        [
+          {
+            "node": "Parse & Format Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Format Results": {
+      "main": [
+        [
+          {
+            "node": "Has Improvements?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Improvements?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Branch Creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Branch Creation": {
+      "main": [
+        [
+          {
+            "node": "Debug Branch Creation Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Debug Branch Creation Data": {
+      "main": [
+        [
+          {
+            "node": "Get Base Branch Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Base Branch Info": {
+      "main": [
+        [
+          {
+            "node": "Create GitHub Branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create GitHub Branch": {
+      "main": [
+        [
+          {
+            "node": "Prepare Test File Commits",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Test File Commits": {
+      "main": [
+        [
+          {
+            "node": "Check File Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check File Exists": {
+      "main": [
+        [
+          {
+            "node": "Prepare GitHub Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare GitHub Request": {
+      "main": [
+        [
+          {
+            "node": "Commit Unit Test Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commit Unit Test Files": {
+      "main": [
+        [
+          {
+            "node": "Create Pull Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Pull Request": {
+      "main": [
+        [
+          {
+            "node": "Notify Dashboard of PR Creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "986e08b6-e5b3-4883-831c-36e56d68d1ba",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fe923943b6524e6831c37e098db10a7fd7983ffee3be9e93c2638ecaad0c00fc"
+  },
+  "id": "IZIAQADpigKlAyjp",
+  "tags": []
+}
