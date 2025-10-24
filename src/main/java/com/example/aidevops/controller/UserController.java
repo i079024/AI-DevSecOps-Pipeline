@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +19,9 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -217,6 +222,136 @@ public class UserController {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("error", e.getMessage());
             return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+    
+    @GetMapping("/download/json")
+    public ResponseEntity<byte[]> downloadUsersAsJson() {
+        try {
+            List<User> users = userService.getAllUsers(null, null);
+            
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules(); // For LocalDateTime serialization
+            String jsonData = mapper.writeValueAsString(users);
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setContentDispositionFormData("attachment", "users_" + 
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".json");
+            
+            return ResponseEntity.ok()
+                .headers(headers)
+                .body(jsonData.getBytes());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(("Error generating JSON download: " + e.getMessage()).getBytes());
+        }
+    }
+    
+    @GetMapping("/download/csv")
+    public ResponseEntity<byte[]> downloadUsersAsCsv() {
+        try {
+            List<User> users = userService.getAllUsers(null, null);
+            
+            CsvMapper mapper = new CsvMapper();
+            CsvSchema schema = CsvSchema.builder()
+                .addColumn("id", CsvSchema.ColumnType.NUMBER)
+                .addColumn("name", CsvSchema.ColumnType.STRING)
+                .addColumn("email", CsvSchema.ColumnType.STRING)
+                .addColumn("createdAt", CsvSchema.ColumnType.STRING)
+                .build()
+                .withHeader();
+            
+            StringWriter writer = new StringWriter();
+            mapper.writerFor(User.class)
+                .with(schema)
+                .writeValues(writer)
+                .writeAll(users);
+            
+            String csvData = writer.toString();
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("text/csv"));
+            headers.setContentDispositionFormData("attachment", "users_" + 
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".csv");
+            
+            return ResponseEntity.ok()
+                .headers(headers)
+                .body(csvData.getBytes());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(("Error generating CSV download: " + e.getMessage()).getBytes());
+        }
+    }
+    
+    @GetMapping("/download/filtered/json")
+    public ResponseEntity<byte[]> downloadFilteredUsersAsJson(@RequestParam(required = false) String query) {
+        try {
+            List<User> users;
+            if (query != null && !query.trim().isEmpty()) {
+                users = userService.searchUsers(query);
+            } else {
+                users = userService.getAllUsers(null, null);
+            }
+            
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules(); // For LocalDateTime serialization
+            String jsonData = mapper.writeValueAsString(users);
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String fileName = "filtered_users_" + 
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".json";
+            headers.setContentDispositionFormData("attachment", fileName);
+            
+            return ResponseEntity.ok()
+                .headers(headers)
+                .body(jsonData.getBytes());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(("Error generating filtered JSON download: " + e.getMessage()).getBytes());
+        }
+    }
+    
+    @GetMapping("/download/filtered/csv")
+    public ResponseEntity<byte[]> downloadFilteredUsersAsCsv(@RequestParam(required = false) String query) {
+        try {
+            List<User> users;
+            if (query != null && !query.trim().isEmpty()) {
+                users = userService.searchUsers(query);
+            } else {
+                users = userService.getAllUsers(null, null);
+            }
+            
+            CsvMapper mapper = new CsvMapper();
+            CsvSchema schema = CsvSchema.builder()
+                .addColumn("id", CsvSchema.ColumnType.NUMBER)
+                .addColumn("name", CsvSchema.ColumnType.STRING)
+                .addColumn("email", CsvSchema.ColumnType.STRING)
+                .addColumn("createdAt", CsvSchema.ColumnType.STRING)
+                .build()
+                .withHeader();
+            
+            StringWriter writer = new StringWriter();
+            mapper.writerFor(User.class)
+                .with(schema)
+                .writeValues(writer)
+                .writeAll(users);
+            
+            String csvData = writer.toString();
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("text/csv"));
+            String fileName = "filtered_users_" + 
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".csv";
+            headers.setContentDispositionFormData("attachment", fileName);
+            
+            return ResponseEntity.ok()
+                .headers(headers)
+                .body(csvData.getBytes());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(("Error generating filtered CSV download: " + e.getMessage()).getBytes());
         }
     }
 }
